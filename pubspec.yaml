@@ -49,6 +49,9 @@ flutter:
   assets:
     - assets/demarrage/blob_ecran_demarrage.svg
     - assets/demarrage/fille_ecran_demarrage.svg
+    - assets/login/blob_login.svg
+    - assets/login/fille_login.svg
+    - assets/login/fofo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
