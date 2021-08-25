@@ -25,6 +25,11 @@ dependencies:
     sdk: flutter
 
   flutter_svg: ^0.22.0
+  http: ^0.13.3
+  pie_chart: ^5.0.0
+  file_picker: ^4.0.0
+  open_file: ^3.2.1
+  syncfusion_flutter_charts: ^19.2.55+1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -49,9 +54,14 @@ flutter:
   assets:
     - assets/demarrage/blob_ecran_demarrage.svg
     - assets/demarrage/fille_ecran_demarrage.svg
+    - assets/demarrage/fille_ecran.svg
+    - assets/demarrage/bonhomme.png
     - assets/login/blob_login.svg
     - assets/login/fille_login.svg
     - assets/login/fofo.png
+    - assets/statistiques/blob_stat_.svg
+    - assets/abscences/blob_abs.svg
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

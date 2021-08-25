@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../entity/User.dart';
+import 'login.dart';
 
-class MyApp extends StatelessWidget {
+class DemarragePage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -21,17 +25,24 @@ class MyApp extends StatelessWidget {
 }
 
 class Demarrage extends StatefulWidget {
-  Demarrage({Key key, this.title}) : super(key: key);
+  final User user;
+  Demarrage({Key key, @required this.user, this.title}) : super(key: key);
   final String title;
 
   @override
   _Demarrage createState() => _Demarrage();
 }
 
-class _Demarrage extends State<Demarrage> {
+class _Demarrage extends State<Demarrage>  {
 
   @override
   Widget build(BuildContext context) {
+    Timer(
+        Duration(seconds: 2),
+            () =>
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => LoginPage())));
+
     return Scaffold(
       body: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +80,7 @@ class _Demarrage extends State<Demarrage> {
                     new Container(
                       margin: const EdgeInsets.only(top: 60, left: 30),
                       child: new SvgPicture.asset(
-                        'assets/demarrage/fille_ecran_demarrage.svg',
+                        'assets/demarrage/fille_ecran.svg',
                         allowDrawingOutsideViewBox: true,
                       ),
                     ),
@@ -83,3 +94,4 @@ class _Demarrage extends State<Demarrage> {
     );
   }
 }
+

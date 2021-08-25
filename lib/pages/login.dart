@@ -2,6 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:tess/pages/statistiques.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import '../entity/User.dart';
+import 'abscences.dart';
+import 'demarrage.dart';
 
 class LoginPage extends StatelessWidget {
   // This widget is the root of your application.
@@ -20,11 +28,10 @@ class LoginPage extends StatelessWidget {
 }
 
 
+
 class Login extends StatefulWidget {
   Login({Key key, this.title}) : super(key: key);
   final String title;
-
-
 
   @override
   _Login createState() => _Login();
@@ -32,6 +39,74 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  Future<String> apiRequest(String url, Map jsonMap) async {
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(jsonMap)));
+    HttpClientResponse response = await request.close();
+    // todo - you should check the response.statusCode
+    String reply = await response.transform(utf8.decoder).join();
+    httpClient.close();
+    return reply;
+  }
+
+  Future<User> login(String username, String password) async{
+    var url = 'http://cba4-2a01-e34-ec7c-4cf0-c548-386c-1054-4b9a.ngrok.io/users/login';
+    var response = await apiRequest(url, {'username': username, 'password': password});
+
+    var userInfo = json.decode(response);
+    var token = userInfo[1];
+    var userInf = userInfo[0];
+
+    if(userInf != null){
+      var user = new User(
+          userInf['id'],
+          userInf['firstName'],
+          userInf['lastName'],
+          userInf['email'],
+          userInf['username'],
+          userInf['password'],
+          userInf['cardNumber'],
+          userInf['phone'],
+          userInf['address'],
+          1,
+          userInf['role'],
+          token
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Abscences(user: user)),
+      );
+    }else{
+      _showAlertDialog("Username or Password incorrect");
+    }
+
+  }
+
+  void _showAlertDialog(String message) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   _buildBlob(){
     return Stack(
       children: [
@@ -66,6 +141,7 @@ class _Login extends State<Login> {
     return SizedBox(height: MediaQuery.of(context).size.height/val);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +163,8 @@ class _Login extends State<Login> {
                   borderRadius: BorderRadius.circular(29)
               ),
               child: TextField(
+                controller: usernameController,
                 onChanged: (value){
-
                 },
                 decoration: InputDecoration(
                   icon: Icon(
@@ -109,6 +185,7 @@ class _Login extends State<Login> {
                   borderRadius: BorderRadius.circular(29)
               ),
               child: TextField(
+                controller: passwordController,
                 obscureText: true,
                 onChanged: (value){
                 },
@@ -127,27 +204,26 @@ class _Login extends State<Login> {
             ),
             _buildSizeBoxMarginTop(80),
             Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          width: MediaQuery.of(context).size.width/1.2,
-          child: Material(
-            elevation: 2.0,
-            borderRadius: BorderRadius.circular(30.0),
-            color: Color(0xff6C63FF),
-            child: MaterialButton(
-              minWidth: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              onPressed: () {},
-              child: Text("Login",
-                  textAlign: TextAlign.center,
-                  style: style.copyWith(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              width: MediaQuery.of(context).size.width/1.2,
+              child: Material(
+                elevation: 2.0,
+                borderRadius: BorderRadius.circular(30.0),
+                color: Color(0xff6C63FF),
+                child: MaterialButton(
+                  minWidth: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  onPressed: () {
+                    login(usernameController.text, passwordController.text);
+                  },
+                  child: Text("Login",
+                      textAlign: TextAlign.center,
+                      style: style.copyWith(
                       color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+              ),
             ),
-          ),
-        ),
-
-
-
           ],
         ),
       ),
