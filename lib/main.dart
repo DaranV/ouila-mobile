@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'pages/demarrage.dart';
 import 'pages/login.dart';
+import 'pages/homePage.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);

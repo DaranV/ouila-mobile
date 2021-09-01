@@ -10,13 +10,14 @@ import 'dart:io';
 import '../entity/User.dart';
 import 'abscences.dart';
 import 'demarrage.dart';
+import 'homePage.dart';
 
 class LoginPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner : false,
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -26,8 +27,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class Login extends StatefulWidget {
   Login({Key key, this.title}) : super(key: key);
@@ -55,15 +54,17 @@ class _Login extends State<Login> {
     return reply;
   }
 
-  Future<User> login(String username, String password) async{
-    var url = 'http://cba4-2a01-e34-ec7c-4cf0-c548-386c-1054-4b9a.ngrok.io/users/login';
-    var response = await apiRequest(url, {'username': username, 'password': password});
+  Future<User> login(String username, String password) async {
+    var url =
+        'http://cba4-2a01-e34-ec7c-4cf0-c548-386c-1054-4b9a.ngrok.io/users/login';
+    var response =
+        await apiRequest(url, {'username': username, 'password': password});
 
     var userInfo = json.decode(response);
     var token = userInfo[1];
     var userInf = userInfo[0];
 
-    if(userInf != null){
+    if (userInf != null) {
       var user = new User(
           userInf['id'],
           userInf['firstName'],
@@ -76,17 +77,15 @@ class _Login extends State<Login> {
           userInf['address'],
           1,
           userInf['role'],
-          token
-      );
+          token);
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Abscences(user: user)),
+        MaterialPageRoute(builder: (context) => Home(user: user)),
       );
-    }else{
+    } else {
       _showAlertDialog("Username or Password incorrect");
     }
-
   }
 
   void _showAlertDialog(String message) async {
@@ -107,7 +106,8 @@ class _Login extends State<Login> {
       },
     );
   }
-  _buildBlob(){
+
+  _buildBlob() {
     return Stack(
       children: [
         new SvgPicture.asset(
@@ -115,32 +115,29 @@ class _Login extends State<Login> {
           allowDrawingOutsideViewBox: true,
         ),
         Container(
-          height: MediaQuery.of(context).size.height/2,
-          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width/8),
+          height: MediaQuery.of(context).size.height / 2,
+          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width / 8),
           child: new SvgPicture.asset(
             'assets/login/fille_login.svg',
             allowDrawingOutsideViewBox: true,
           ),
         )
-
       ],
     );
   }
-  _buildTextOuila(){
-    return Text(
-        "OUILA",
+
+  _buildTextOuila() {
+    return Text("OUILA",
         textAlign: TextAlign.center,
         style: const TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w500, // semibold
-            color: Color(0xff6C63FF)
-        )
-    );
-  }
-  _buildSizeBoxMarginTop(int val){
-    return SizedBox(height: MediaQuery.of(context).size.height/val);
+            color: Color(0xff6C63FF)));
   }
 
+  _buildSizeBoxMarginTop(int val) {
+    return SizedBox(height: MediaQuery.of(context).size.height / val);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,56 +154,49 @@ class _Login extends State<Login> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              width: MediaQuery.of(context).size.width/1.2,
+              width: MediaQuery.of(context).size.width / 1.2,
               decoration: BoxDecoration(
                   color: Color(0xffEBDAFF),
-                  borderRadius: BorderRadius.circular(29)
-              ),
+                  borderRadius: BorderRadius.circular(29)),
               child: TextField(
                 controller: usernameController,
-                onChanged: (value){
-                },
+                onChanged: (value) {},
                 decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.person,
-                    color: Color(0xff6C63FF),
-                  ),
-                  hintText: "Your Email",
-                  border: InputBorder.none
-                ),
+                    icon: Icon(
+                      Icons.person,
+                      color: Color(0xff6C63FF),
+                    ),
+                    hintText: "Your Email",
+                    border: InputBorder.none),
               ),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              width: MediaQuery.of(context).size.width/1.2,
+              width: MediaQuery.of(context).size.width / 1.2,
               decoration: BoxDecoration(
                   color: Color(0xffEBDAFF),
-                  borderRadius: BorderRadius.circular(29)
-              ),
+                  borderRadius: BorderRadius.circular(29)),
               child: TextField(
                 controller: passwordController,
                 obscureText: true,
-                onChanged: (value){
-                },
+                onChanged: (value) {},
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.lock,
                       color: Color(0xff6C63FF),
                     ),
-                    suffixIcon: Icon(
-                        Icons.visibility,
-                        color: Color(0xff6C63FF)),
+                    suffixIcon:
+                        Icon(Icons.visibility, color: Color(0xff6C63FF)),
                     hintText: "Password",
-                    border: InputBorder.none
-                ),
+                    border: InputBorder.none),
               ),
             ),
             _buildSizeBoxMarginTop(80),
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              width: MediaQuery.of(context).size.width/1.2,
+              width: MediaQuery.of(context).size.width / 1.2,
               child: Material(
                 elevation: 2.0,
                 borderRadius: BorderRadius.circular(30.0),
@@ -220,8 +210,8 @@ class _Login extends State<Login> {
                   child: Text("Login",
                       textAlign: TextAlign.center,
                       style: style.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
               ),
             ),
           ],
